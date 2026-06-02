@@ -13,6 +13,14 @@ system_alias = {
     "sg": "ShinobiGami"
 }
 async def roll_dice_async(sys:str, cmd:str) -> str:
+    """
+    :param sys: System code provide by bcdice API.
+    :type sys: str
+    :param cmd: Diceroll command.
+    :type cmd: str
+    :return: Roll result.
+    :rtype: str
+    """
     endpoint = f'{url}/v2/game_system/{system_alias[sys] if sys in system_alias.keys() else sys}/roll'
     
     async with aiohttp.ClientSession() as session:
