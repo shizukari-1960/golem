@@ -4,12 +4,13 @@ from sympy import sympify
 
 chdir(path.dirname(path.abspath(__file__)))
 
+# gonna abandon!
 def dn(n) -> int:
     return random.randint(1,n)
 
 def d6() -> int: 
     return random.randint(1,6)
-    pass
+
 def d66() -> int:
     a = d6()
     b = d6()
