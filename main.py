@@ -25,7 +25,7 @@ async def on_ready():
 
 @client.event
 async def on_message(message: discord.message.Message):
-    currentWorkLoop = asyncio.get_event_loop()
+    #currentWorkLoop = asyncio.get_event_loop() #no need now
     
     if message.author == client.user:
         return
@@ -49,9 +49,9 @@ async def on_message(message: discord.message.Message):
     pattern_normal_d = r'(\d+)d(\d+)'
     pattern_multiply_d = r'x(\d+)'
     pattern_multiply_s = r'k(\d+)@'
-    match_nd = re.search(pattern_normal_d, message.content, re.IGNORECASE)
-    match_md = re.search(pattern_multiply_d, message.content, re.IGNORECASE)
-    match_sw = re.search(pattern_multiply_s, message.content, re.IGNORECASE)
+    match_nd = re.match(pattern_normal_d, message.content, re.IGNORECASE)
+    match_md = re.match(pattern_multiply_d, message.content, re.IGNORECASE)
+    match_sw = re.match(pattern_multiply_s, message.content, re.IGNORECASE)
     if match_nd or match_md or match_sw:
         rp = await api_cnt.roll_dice_async('sw', message.content)
         if rp:
