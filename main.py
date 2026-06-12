@@ -7,8 +7,9 @@ from dotenv import load_dotenv
 import asyncio
 import re
 
-import tools
 import api_cnt
+import tools
+import chr_import
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
@@ -36,6 +37,11 @@ async def on_message(message: discord.message.Message):
         if message.content.startswith('.help'):
             from helpmsg import help
             await message.channel.send(embeds=help)
+            return
+        if message.content.startswith('.import'):
+            url = message.content.split(' ',1)[1]
+            rp = await chr_import.import_chr(url)
+            await message.channel.send(rp)
             return
         ctx = message.content.split(' ',1)
         if len(ctx) > 1:
