@@ -52,9 +52,14 @@ async def import_chr(url):
         if wait > 0:
             await asyncio.sleep(wait)
         _last_import_time = time.monotonic()
-
-        doc_code = url.split('/d/')[1].split('/')[0]
-        gid = url.split('#gid=')[1]
+        try:
+            doc_code = url.split('/d/')[1].split('/')[0]
+        except IndexError:
+            return "Invalid URL format"
+        try:
+            gid = url.split('#gid=')[1]
+        except IndexError:
+            return "Invalid URL format"
         print(f"Importing character from doc: {doc_code}, gid: {gid}")
 
         url = f"https://docs.google.com/spreadsheets/d/{doc_code}/export"
