@@ -6,9 +6,9 @@ from dotenv import load_dotenv
 
 import asyncio
 import re
+from random import randint
 
 import api_cnt
-import tools
 import chr_import
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
@@ -39,8 +39,17 @@ async def on_message(message: discord.message.Message):
             await message.channel.send(embeds=help)
             return
         if message.content.startswith('.import'):
-            url = message.content.split(' ',1)[1]
-            rp = await chr_import.import_chr(url)
+            contents = message.content.split(' ', 1)
+            if len(contents) < 2:
+                await message.channel.send("Please provide a URL to import.")
+                return
+            url = contents[1]
+            try:
+                rp = await chr_import.import_chr(url)
+                
+            except Exception as e:
+                print(f"Error occurred while importing character: {e}")
+                rp = "Character import failed."
             await message.channel.send(rp)
             return
         ctx = message.content.split(' ',1)
@@ -65,9 +74,9 @@ async def on_message(message: discord.message.Message):
         return
     
     if message.content.startswith('d66') or message.content.startswith('D66'):
-        await message.channel.send(tools.d66())
-    
-    
+        rt = str(randint(1,6)) + str(randint(1,6))
+        await message.channel.send(rt)
+        return
     
 
 

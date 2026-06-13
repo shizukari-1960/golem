@@ -1,11 +1,10 @@
-from time import time
-
 import aiohttp
 import asyncio
 import json
 import pandas as pd
 import os
 import time
+import re
 from random import uniform
 from pprint import pprint
 
@@ -59,6 +58,10 @@ async def import_chr(url):
         try:
             gid = url.split('#gid=')[1]
         except IndexError:
+            return "Invalid URL format"
+        if not re.fullmatch(r'[A-Za-z0-9_-]+', doc_code):
+            return "Invalid URL format"
+        if not re.fullmatch(r'[0-9]+', gid):
             return "Invalid URL format"
         print(f"Importing character from doc: {doc_code}, gid: {gid}")
 
