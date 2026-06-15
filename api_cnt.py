@@ -2,7 +2,7 @@ import requests
 import asyncio
 import aiohttp
 
-url = 'http://localhost:9292'
+url = 'https://bcdice.onlinesession.app'
 
 system_alias = {
     "D":"DiceBot",
