@@ -7,9 +7,12 @@ from dotenv import load_dotenv
 import asyncio
 import re
 from random import randint
+from datetime import datetime
+import zoneinfo
 
 import api_cnt
 import chr_import
+from sec import bin
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
@@ -78,6 +81,44 @@ async def on_message(message: discord.message.Message):
         await message.channel.send(rt)
         return
     
+@client.event
+async def on_message_edit(before: discord.Message, after: discord.Message):
+    if before.author.bot:
+        return
+    if not before.guild:
+        return
+    if before.guild.id not in bin.monitor_guild.keys():
+        return
+    if before.content == after.content:
+        return
+    zone = zoneinfo.ZoneInfo("Asia/Taipei")
+    now = datetime.now(zone)
+    log_ch = client.get_channel(bin.monitor_guild[before.guild.id])
+
+    rt = f"[{now}] Edited Message from [ {before.author.name} ( {before.author.nick} ) ] [{after.jump_url}]\n\
+Before: Created at {before.created_at.astimezone(zone)}\n```{before.content}```\
+After: Edit at {after.edited_at.astimezone(zone)}\n```{after.content}```\
+---------------------------------------------------"
+    #print(rt)
+    await log_ch.send(rt)
+
+@client.event
+async def on_message_delete(message: discord.Message):
+    if message.author.bot:
+        return
+    if not message.guild:
+        return
+    if message.guild.id not in bin.monitor_guild.keys():
+        return
+    zone = zoneinfo.ZoneInfo("Asia/Taipei")
+    now = datetime.now(zone)
+    log_ch = client.get_channel(bin.monitor_guild[message.guild.id])
+    
+    rt = f"[{now}] Delete Message from [ {message.author.name} ( {message.author.nick} ) ] [{message.jump_url}]\n\
+Content: Created at {message.created_at.astimezone(zone)}\n```{message.content}```\
+---------------------------------------------------"
+    #print(rt)
+    await log_ch.send(rt)
 
 
 client.run(token)
