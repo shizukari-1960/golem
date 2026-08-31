@@ -22,7 +22,6 @@ def gr(count:int, prior:list, tp = None):
     
     
     result = [min(t, key=priority_map.get) for t in choice] + redraw
-    print(result)
     res = dict(Counter(result))
     ct = [0,0,0,0,0,0]
     for key in res.keys():
