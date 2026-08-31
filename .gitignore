@@ -222,3 +222,4 @@ __marimo__/
 *.csv
 chr_data/
 sec/
+.continue/

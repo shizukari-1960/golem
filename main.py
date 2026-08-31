@@ -4,7 +4,6 @@ import os
 import discord
 from dotenv import load_dotenv
 
-import asyncio
 import re
 from random import randint
 from datetime import datetime
@@ -13,6 +12,7 @@ import zoneinfo
 import api_cnt
 import chr_import
 from sec import bin
+from gr import gr
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
@@ -41,6 +41,38 @@ async def on_message(message: discord.message.Message):
             from helpmsg import help
             await message.channel.send(embeds=help)
             return
+        if message.content.startswith('.gr'):
+            #.gr 70 5,6,4,3,1,2 A
+            contents = message.content.split(' ')
+            contents.pop(0)
+            count = int(contents[0])
+            if count < 1 or count >= 1000:
+                await message.channel.send('成長數值超過範圍。')
+                return
+            pr = contents[1].split(',')
+            prior = [int(i) for i in pr]
+            is_in_range = all(1 <= x <= 6 for x in prior)
+            if len(prior) != 6:
+                await message.channel.send('順序指定缺少/超過')
+                return
+            if len(prior) != len(set(prior)):
+                await message.channel.send('順序存在重複')
+                return
+            if not is_in_range:
+                await message.channel.send('順序數字超過範圍')
+                return
+            try:
+                if contents[2] not in ['A','B','C']:
+                    tp = None
+                else:
+                    tp = contents[2]
+            except:
+                tp = None
+
+            await message.channel.send(gr(count,prior,tp))
+            return
+
+
         if message.content.startswith('.import'):
             contents = message.content.split(' ', 1)
             if len(contents) < 2:
